@@ -1,3 +1,6 @@
+add_library('pdf')
+salvar_pdf = False
+
 firstPress = 0 #variavel que guarda se o mouse foi pressionado a primeira vez
 linhas = [] #lista de valores (vazio)
 backgroundColor = 255
@@ -20,6 +23,11 @@ def sorteio(n): #método de sorteio onde vão ser plotadas as bolinhas
         pontos.append((x, y)) #colocar um valor dentro da lista de pontos
         
 def draw():
+    
+    global salvar_pdf
+    if salvar_pdf: #salvar_pdf == True
+        beginRecord(PDF, "DotDotDot.pdf")
+
     background(backgroundColor) #limpa o background para que a linha plotada nao deixe rastro
         
     for x, y in pontos:
@@ -32,6 +40,7 @@ def draw():
     for x1, y1, x2, y2 in linhas: #guarda as linhas que foram desenhadas na tela
         line(x1, y1, x2, y2) 
 
+        endRecord()
 
 def mousePressed(): 
     global firstPress, x0, y0
@@ -55,7 +64,7 @@ def keyPressed():
     
     if key == " ": #se o espaço for pressionado, novas bolinhas vao aparecer
         global backgroundColor
-        backgroundColor = random(256)
+        backgroundColor = color(random(256), random(256), random(256))
         background(backgroundColor)
         print(backgroundColor)
         sorteio(5)
@@ -64,3 +73,6 @@ def keyPressed():
         linhas[:] = []
         #global linhas
         #linhas = []
+        
+    if key == SHIFT:
+        salvar_pdf = True
